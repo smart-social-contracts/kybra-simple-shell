@@ -1,6 +1,11 @@
 import subprocess
 import sys
 import re
+import time
+
+print("\n=====================================================")
+print("🚀 STARTING SHELL COMMAND TESTS at", time.strftime("%Y-%m-%d %H:%M:%S"))
+print("=====================================================\n")
 
 # Commands to test
 test_commands = [
@@ -40,6 +45,9 @@ def run_command(cmd):
         return f"Error: {e.stderr}"
 
 # Run tests
+print("\n📋 Running test suite with", len(test_commands), "test commands...")
+print("📋 Python version:", sys.version)
+print("📋 Testing against canister ID: [Will be determined from dfx output]\n")
 failed = False
 for cmd in test_commands:
     print(f"\nExecuting: {cmd}")
@@ -76,5 +84,13 @@ for cmd in test_commands:
         else:
             print("✓ Expression evaluation test passed")
 
+# Summarize test results
+if not failed:
+    print("\n✅ ALL SHELL TESTS PASSED SUCCESSFULLY!")
+    print("=====================================================\n")
+else:
+    print("\n❌ SOME SHELL TESTS FAILED!")
+    print("=====================================================\n")
+    
 # Exit with appropriate status
 sys.exit(1 if failed else 0)
