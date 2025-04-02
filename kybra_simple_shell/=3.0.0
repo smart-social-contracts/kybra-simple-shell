@@ -1,7 +1,0 @@
-Collecting prompt_toolkit
-  Downloading prompt_toolkit-3.0.50-py3-none-any.whl (387 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 387.8/387.8 kB 1.7 MB/s eta 0:00:00
-Collecting wcwidth
-  Downloading wcwidth-0.2.13-py2.py3-none-any.whl (34 kB)
-Installing collected packages: wcwidth, prompt_toolkit
-Successfully installed prompt_toolkit-3.0.50 wcwidth-0.2.13
