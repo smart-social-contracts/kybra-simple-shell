@@ -20,16 +20,17 @@ cd /app/src
 # Create an __init__.py file to make the directory a package
 touch __init__.py
 cd kybra_simple_shell
-# Install the package in development mode
+# Install the package in development mode and ensure dependencies are installed
 pip install -e .
+# Make sure prompt_toolkit is installed
+pip install prompt_toolkit>=3.0.0
 # Add site-packages to PYTHONPATH for the test scripts
 export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.10/site-packages
 
 # Test the shell by running some test commands
 echo "Testing Kybra Simple Shell with the deployed canister..."
 
-# Copy the test files to the container
-cp /app/src/../test_shell_commands.py /app/test_shell_commands.py
+# The test files are now directly mounted to /app in the container
 
 # Run the test script
 cd /app  # Return to app root directory
@@ -39,8 +40,7 @@ TEST_RESULT=$?
 # Create a simple functional test instead of running unit tests
 echo "Running a simple functional test of the CLI tool..."
 
-# Copy the CLI test file to the container
-cp /app/src/../cli_test.py /app/cli_test.py
+# CLI test file is directly mounted to /app
 
 # Run the test
 cd /app

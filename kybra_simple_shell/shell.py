@@ -4,6 +4,8 @@ import re
 import sys
 import platform
 import pkg_resources
+from prompt_toolkit import PromptSession
+from prompt_toolkit.history import InMemoryHistory
 
 class KybraShell:
     def __init__(self, canister_name="my_canister", network=None):
@@ -88,6 +90,9 @@ class KybraShell:
         print("\nKybra Simple Shell Help:")
         print("  :q           - Quit the shell")
         print("  :help        - Show this help message")
+        print("\nNavigation:")
+        print("  Up Arrow     - Go to previous command in history")
+        print("  Down Arrow   - Go to next command in history")
         print("\nYou can execute Python code directly in this shell.")
         print("The code will be sent to your Kybra canister for execution.")
         print("Example: print('Hello from canister!')")
@@ -111,12 +116,17 @@ class KybraShell:
         print(f"Canister: {self.canister_name}")
         print(f"Network: {self.network if self.network else 'local'}")
         print("Type ':q' to quit, ':help' for help")
+        print("Arrow keys ↑↓ can be used to navigate command history")
         print()
+        
+        # Create a prompt session with history
+        history = InMemoryHistory()
+        session = PromptSession(history=history)
         
         while True:
             try:
-                # Get user input
-                user_input = input(">>> ")
+                # Get user input with prompt_toolkit (supports arrow key navigation)
+                user_input = session.prompt(">>> ")
                 
                 # Check for shell commands
                 if user_input.strip() == ":q":
