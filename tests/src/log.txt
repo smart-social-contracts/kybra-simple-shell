@@ -1,0 +1,3 @@
+Running dfx start for version 0.25.0
+Using the default configuration for the local shared network.
+Replica API running in the background on 127.0.0.1:4943
