@@ -13,11 +13,14 @@ def greet() -> str:
 @update
 def execute_code(code: str) -> str:
     """Executes Python code and returns the output.
-    
+
     This is the core function needed for the Kybra Simple Shell to work.
     It captures stdout, stderr, and return values from the executed code.
     """
-    import sys, io, traceback
+    import io
+    import sys
+    import traceback
+
     stdout = io.StringIO()
     stderr = io.StringIO()
     sys.stdout = stdout
@@ -42,4 +45,3 @@ def execute_code(code: str) -> str:
     sys.stdout = sys.__stdout__
     sys.stderr = sys.__stderr__
     return stdout.getvalue() + stderr.getvalue()
-

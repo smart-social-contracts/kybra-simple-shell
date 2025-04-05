@@ -1,6 +1,6 @@
+import re
 import subprocess
 import sys
-import re
 import time
 
 print("\n=====================================================")
@@ -14,22 +14,23 @@ test_commands = [
     "print(a)",
     "a * 2",
     "import sys",
-    "print(sys.version)"
+    "print(sys.version)",
 ]
+
 
 # Function to execute a shell command and return output
 def run_command(cmd):
     try:
         # Create a command that sends the test input to the shell
         # Escape quotes properly for Candid format
-        escaped_cmd = cmd.replace('"', '\\"').replace("'", "\\'") 
+        escaped_cmd = cmd.replace('"', '\\"').replace("'", "\\'")
         dfx_cmd = [
-            "dfx", 
-            "canister", 
-            "call", 
-            "test", 
-            "execute_code", 
-            f'("{escaped_cmd}")'
+            "dfx",
+            "canister",
+            "call",
+            "test",
+            "execute_code",
+            f'("{escaped_cmd}")',
         ]
         result = subprocess.run(dfx_cmd, capture_output=True, text=True, check=True)
         # Extract result from dfx output
@@ -38,11 +39,17 @@ def run_command(cmd):
         match = re.search(r'\(\s*"(.*?)"\s*\)', output, re.DOTALL)
         if match:
             # Unescape special characters and handle multi-line output
-            response = match.group(1).replace('\\n', '\n').replace('\\"', '"').replace('\\\\', '\\')
+            response = (
+                match.group(1)
+                .replace("\\n", "\n")
+                .replace('\\"', '"')
+                .replace("\\\\", "\\")
+            )
             return response
         return output
     except subprocess.CalledProcessError as e:
         return f"Error: {e.stderr}"
+
 
 # Run tests
 print("\n📋 Running test suite with", len(test_commands), "test commands...")
@@ -53,7 +60,7 @@ for cmd in test_commands:
     print(f"\nExecuting: {cmd}")
     output = run_command(cmd)
     print(f"Output:\n{output}")
-    
+
     # Validate results for specific commands
     if cmd == "print('Hello from Kybra Simple Shell')":
         if "Hello from Kybra Simple Shell" not in output:
@@ -61,7 +68,7 @@ for cmd in test_commands:
             failed = True
         else:
             print("✓ Hello test passed")
-    
+
     if cmd == "a = 42":
         # This is an assignment, should have no error
         if "Error" in output or "TypeError" in output or "SyntaxError" in output:
@@ -69,14 +76,14 @@ for cmd in test_commands:
             failed = True
         else:
             print("✓ Assignment test passed")
-    
+
     if cmd == "print(a)":
         if "42" not in output:
             print("ERROR: Variable a not set or returned correctly")
             failed = True
         else:
             print("✓ Variable access test passed")
-    
+
     if cmd == "a * 2":
         if "84" not in output:
             print("ERROR: Expression evaluation failed")
@@ -91,6 +98,6 @@ if not failed:
 else:
     print("\n❌ SOME SHELL TESTS FAILED!")
     print("=====================================================\n")
-    
+
 # Exit with appropriate status
 sys.exit(1 if failed else 0)

@@ -20,7 +20,6 @@ setup(
     long_description_content_type="text/markdown",
     author="Smart Social Contracts",
     author_email="smartsocialcontracts@gmail.com",
-    url="https://smartsocialcontracts.org",
     url="https://github.com/smart-social-contracts/kybra-simple-shell",
     classifiers=[
         "Programming Language :: Python :: 3.10",
