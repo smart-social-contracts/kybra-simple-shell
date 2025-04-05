@@ -2,6 +2,11 @@
 
 A lightweight CLI tool for interacting with Python-based Kybra canisters on the Internet Computer (ICP). This acts as a remote REPL, letting you send Python code to your canister and see the output — including `stdout`, return values, and errors — right in your terminal.
 
+[![Test](https://github.com/smart-social-contracts/kybra-simple-shell/actions/workflows/test.yml/badge.svg)](https://github.com/smart-social-contracts/kybra-simple-shell/actions)
+[![PyPI version](https://badge.fury.io/py/kybra-simple-shell.svg)](https://badge.fury.io/py/kybra-simple-shell)
+[![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3107/)
+[![License](https://img.shields.io/github/license/smart-social-contracts/kybra-simple-shell.svg)](https://github.com/smart-social-contracts/kybra-simple-shell/blob/main/LICENSE)
+
 ---
 
 ## ✨ Features
