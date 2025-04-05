@@ -11,6 +11,6 @@ setup(
     },
     install_requires=[],
     description="A lightweight CLI tool for interacting with Python-based Kybra canisters",
-    author="Kybra Team",
+    author="Smart Social Contracts Team",
     url="https://github.com/your-org/kybra-simple-shell",
 )

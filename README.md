@@ -18,7 +18,7 @@ A lightweight CLI tool for interacting with Python-based Kybra canisters on the 
 First, clone the repo and install locally:
 
 ```bash
-git clone https://github.com/your-org/kybra-simple-shell.git
+git clone https://github.com/smart-social-contracts/kybra-simple-shell.git
 cd kybra-simple-shell
 pip install -e .
 ```
@@ -31,7 +31,7 @@ Want to try it out quickly? The repository includes a test canister with the req
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/kybra-simple-shell.git
+git clone https://github.com/smart-social-contracts/kybra-simple-shell.git
 cd kybra-simple-shell
 
 # Install the package
