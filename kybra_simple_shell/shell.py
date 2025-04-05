@@ -4,6 +4,7 @@ import re
 import sys
 import platform
 import pkg_resources
+import ast
 from prompt_toolkit import PromptSession
 from prompt_toolkit.history import InMemoryHistory
 
@@ -45,16 +46,72 @@ class KybraShell:
             # Parse the output
             output = result.stdout.strip()
             
-            # Extract the actual response from dfx output format
-            # The output is typically in the format: (result)
-            match = re.search(r'\("(.*)"\)', output)
-            if match:
-                # The canister returns a string that may contain escaped characters
-                response = match.group(1)
-                # Unescape any escaped characters
-                response = response.replace('\\n', '\n').replace('\\"', '"')
-                return response
+            # First, check if the output is from a Python collection function like dir()
+            # These typically return a tuple with a string representation of a list
+            # Example: ("['item1', 'item2']\n",)
             
+            # Remove trailing commas and parentheses that might cause parsing issues
+            cleaned_output = output.strip().rstrip(',)').lstrip('(')
+            
+            # Check if it looks like a string representation of a list
+            if cleaned_output.strip().startswith('"[') and ('\n' in cleaned_output or ']"' in cleaned_output):
+                # Extract just the list string (between quotes)
+                list_str_match = re.search(r'"(.*)"', cleaned_output, re.DOTALL)
+                if list_str_match:
+                    list_str = list_str_match.group(1)
+                    try:
+                        # First unescape the string
+                        unescaped_str = ast.literal_eval(f'"{list_str}"')
+                        # Then try to evaluate it as a Python literal (list)
+                        try:
+                            result = ast.literal_eval(unescaped_str)
+                            return result
+                        except (SyntaxError, ValueError):
+                            # If it can't be parsed as a list, return the unescaped string
+                            return unescaped_str
+                    except (SyntaxError, ValueError):
+                        # Basic fallback
+                        return list_str.replace('\\n', '\n').replace('\\"', '"')
+            
+            # General tuple pattern: (  "content"  )
+            tuple_match = re.search(r'\(\s*"(.*)"\s*\)', output, re.DOTALL)
+            if tuple_match:
+                tuple_content = tuple_match.group(1)
+                try:
+                    # Properly unescape the string content inside the tuple
+                    unescaped_content = ast.literal_eval(f'"{tuple_content}"')
+                    # If it's a list representation, evaluate it as such
+                    if unescaped_content.startswith('[') and unescaped_content.endswith(']'):
+                        try:
+                            # Try to parse it as a list if it looks like one
+                            list_content = ast.literal_eval(unescaped_content)
+                            return list_content
+                        except (SyntaxError, ValueError):
+                            # If it can't be parsed as a list, return as string
+                            return unescaped_content
+                    return unescaped_content
+                except (SyntaxError, ValueError):
+                    # Fallback to basic unescaping
+                    unescaped_content = tuple_content.replace('\\n', '\n').replace('\\"', '"')
+                    return unescaped_content
+            
+            # If not a tuple, try the standard pattern: ("content")
+            standard_match = re.search(r'\("(.*)"\)', output)
+            if standard_match:
+                # Extract the content between quotes, preserving escaped characters
+                response = standard_match.group(1)
+                
+                # Properly unescape all escape sequences using ast.literal_eval
+                try:
+                    # Add quotes around the string and use ast.literal_eval to handle all escape sequences
+                    unescaped_response = ast.literal_eval(f'"{response}"')
+                    return unescaped_response
+                except (SyntaxError, ValueError):
+                    # Fallback to the basic unescaping if ast.literal_eval fails
+                    response = response.replace('\\n', '\n').replace('\\"', '"')
+                    return response
+            
+            # If no patterns matched, return the raw output
             return output
         except subprocess.CalledProcessError as e:
             return f"Error calling canister: {e.stderr}"

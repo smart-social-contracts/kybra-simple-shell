@@ -23,8 +23,69 @@ cd kybra-simple-shell
 pip install -e .
 ```
 
+---
 
-🚀 Usage
+## ⚡ Quick Start with Example Canister
+
+Want to try it out quickly? The repository includes a test canister with the required `execute_code` method:
+
+```bash
+# Clone the repository
+git clone https://github.com/your-org/kybra-simple-shell.git
+cd kybra-simple-shell
+
+# Install the package
+pip install -e .
+
+# Navigate to the tests directory
+cd tests
+
+# Start a local Internet Computer replica
+dfx start --clean --background
+
+# Deploy the test canister
+dfx deploy
+
+# Use the shell with the test canister directly by name
+kybra-simple-shell test
+```
+
+Now you can try Python commands in the shell:
+
+```
+>>> print("Hello from your canister!")
+Hello from your canister!
+>>> a = 42
+>>> a * 2
+84
+>>> import math
+>>> math.sqrt(16)
+4.0
+
+# You can access and interact with objects in the canister's memory
+>>> my_list = [1, 2, 3, 4, 5]
+>>> my_list.append(6)
+>>> my_list
+[1, 2, 3, 4, 5, 6]
+
+# Objects persist between commands as they're stored in the canister's memory
+>>> len(my_list)
+6
+
+# You can even import modules defined in your canister
+>>> from tests import test_functions
+>>> dir(test_functions)
+```
+
+When you're done, stop the local replica:
+
+```bash
+dfx stop
+```
+
+---
+
+## 🚀 Usage
 Before using the shell, make sure:
 
 Your Kybra canister is running and deployed.
