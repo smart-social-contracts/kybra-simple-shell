@@ -44,7 +44,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install build twine setuptools wheel bump2version
+        pip install build twine setuptools wheel bumpversion
     
     # Only perform version bump if release_type is provided
     - name: Bump version
@@ -53,7 +53,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        bump2version ${{ github.event.inputs.release_type }}
+        bumpversion ${{ github.event.inputs.release_type }}
         echo "NEW_VERSION=$(grep -Po '(?<=version=")[^"]*' setup.py)" >> $GITHUB_OUTPUT
     
     - name: Build package
