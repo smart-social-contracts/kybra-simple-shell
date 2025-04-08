@@ -7,7 +7,7 @@ long_description = (here / "README.md").read_text(encoding="utf-8")
 
 setup(
     name="kybra-simple-shell",
-    version="0.1.4",
+    version="0.1.5",
     packages=find_packages(),
     entry_points={
         "console_scripts": [
